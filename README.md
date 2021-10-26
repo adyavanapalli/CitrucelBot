@@ -2,6 +2,8 @@
 
 A telegram bot for sending reminders to take Citrucel.
 
+![A screenshot of the bot in action](docs/screenshot.png)
+
 ## Description
 
 This is a very bare-bones bot in that it admits no interaction from a user and
