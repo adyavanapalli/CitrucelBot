@@ -23,7 +23,7 @@ gcloud pubsub topics create citrucel-topic
 
 gcloud scheduler jobs create pubsub citrucel-job \
     --message-body="citrucel-job" \
-    --schedule="0 16 * * *" \
+    --schedule="0 18 * * *" \
     --time-zone="America/New_York" \
     --topic="citrucel-topic"
 

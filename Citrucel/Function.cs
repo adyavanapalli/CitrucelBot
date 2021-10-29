@@ -15,9 +15,9 @@ namespace Citrucel
     public class Function : ICloudEventFunction<MessagePublishedData>
     {
         /// <summary>
-        /// The number of seconds in 4 hours.
+        /// The number of seconds from now to send the notification.
         /// </summary>
-        private const int SECONDS_IN_FOUR_HOURS = 4 * 60 * 60;
+        private const int SECONDS_UNTIL_INVOCATION = 2 * 60 * 60;
 
         /// <summary>
         /// The Telegram Bot API token.
@@ -93,7 +93,7 @@ namespace Citrucel
                         HttpMethod = HttpMethod.Get,
                         Url = $"https://api.telegram.org/bot{_botToken}/sendMessage?chat_id={_chatId}&text=Time to Citrucel it up folks!",
                     },
-                    ScheduleTime = Timestamp.FromDateTime(DateTime.UtcNow.AddSeconds(new Random().Next(SECONDS_IN_FOUR_HOURS)))
+                    ScheduleTime = Timestamp.FromDateTime(DateTime.UtcNow.AddSeconds(new Random().Next(SECONDS_UNTIL_INVOCATION)))
                 }
             });
         }
