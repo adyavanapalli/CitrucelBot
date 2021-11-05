@@ -38,7 +38,7 @@ create_task_queue() {
 }
 
 create_secret_manager_key() {
-    echo -n "$CITRUCEL_BOT_TOKEN" | gcloud secrets create citrucel-secret \
+    echo -n "${CITRUCEL_BOT_TOKEN}" | gcloud secrets create citrucel-secret \
         --data-file="-"
 }
 
