@@ -1,3 +1,11 @@
 .git/
+.terraform/
+.vscode/
+
 bin/
 obj/
+
+*.tfstate
+*.tfstate.*
+
+Citrucel.zip
