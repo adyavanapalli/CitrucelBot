@@ -60,6 +60,8 @@ resource "random_pet" "google_service_account" {
 
 resource "google_project_service" "serviceusage_service" {
   service = "serviceusage.googleapis.com"
+
+  disable_on_destroy = false
 }
 
 resource "google_project_service" "cloudbuild_service" {
