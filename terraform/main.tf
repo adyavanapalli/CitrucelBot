@@ -12,28 +12,6 @@ terraform {
   }
 }
 
-variable "project" {
-  type = string
-}
-
-variable "region" {
-  type = string
-}
-
-variable "zone" {
-  type = string
-}
-
-variable "bot_token" {
-  type      = string
-  sensitive = true
-}
-
-variable "chat_id" {
-  type      = string
-  sensitive = true
-}
-
 provider "google" {
   project = var.project
   region  = var.region
@@ -165,7 +143,7 @@ resource "google_storage_bucket" "bucket" {
 
 resource "zipper_file" "fixture" {
   output_path = "Citrucel.zip"
-  source      = "Citrucel"
+  source      = "../Citrucel"
   type        = "local"
 }
 
