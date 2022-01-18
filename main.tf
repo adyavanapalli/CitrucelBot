@@ -59,13 +59,11 @@ resource "random_pet" "google_service_account" {
 }
 
 resource "google_project_service" "serviceusage_service" {
-  service                    = "serviceusage.googleapis.com"
-  disable_dependent_services = true
+  service = "serviceusage.googleapis.com"
 }
 
 resource "google_project_service" "cloudbuild_service" {
-  service                    = "cloudbuild.googleapis.com"
-  disable_dependent_services = true
+  service = "cloudbuild.googleapis.com"
 
   depends_on = [
     google_project_service.serviceusage_service
@@ -73,8 +71,7 @@ resource "google_project_service" "cloudbuild_service" {
 }
 
 resource "google_project_service" "cloudfunctions_service" {
-  service                    = "cloudfunctions.googleapis.com"
-  disable_dependent_services = true
+  service = "cloudfunctions.googleapis.com"
 
   depends_on = [
     google_project_service.serviceusage_service
@@ -82,8 +79,7 @@ resource "google_project_service" "cloudfunctions_service" {
 }
 
 resource "google_project_service" "cloudscheduler_service" {
-  service                    = "cloudscheduler.googleapis.com"
-  disable_dependent_services = true
+  service = "cloudscheduler.googleapis.com"
 
   depends_on = [
     google_project_service.serviceusage_service
@@ -91,8 +87,7 @@ resource "google_project_service" "cloudscheduler_service" {
 }
 
 resource "google_project_service" "cloudtasks_service" {
-  service                    = "cloudtasks.googleapis.com"
-  disable_dependent_services = true
+  service = "cloudtasks.googleapis.com"
 
   depends_on = [
     google_project_service.serviceusage_service
