@@ -64,6 +64,8 @@ resource "google_project_service" "iam_service" {
 
 resource "google_project_service" "pubsub_service" {
   service = "pubsub.googleapis.com"
+
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "cloudresourcemanager_service" {
