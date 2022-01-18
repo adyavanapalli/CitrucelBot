@@ -58,24 +58,56 @@ resource "random_pet" "google_cloudfunctions_function" {
 resource "random_pet" "google_service_account" {
 }
 
+resource "google_project_service" "iam_service" {
+  service = "iam.googleapis.com"
+}
+
+resource "google_project_service" "pubsub_service" {
+  service = "pubsub.googleapis.com"
+}
+
+resource "google_project_service" "cloudresourcemanager_service" {
+  service = "cloudresourcemanager.googleapis.com"
+}
+
 resource "google_project_service" "cloudbuild_service" {
   service = "cloudbuild.googleapis.com"
+
+  depends_on = [
+    google_project_service.cloudresourcemanager_service
+  ]
 }
 
 resource "google_project_service" "cloudfunctions_service" {
   service = "cloudfunctions.googleapis.com"
+
+  depends_on = [
+    google_project_service.cloudresourcemanager_service
+  ]
 }
 
 resource "google_project_service" "cloudscheduler_service" {
   service = "cloudscheduler.googleapis.com"
+
+  depends_on = [
+    google_project_service.cloudresourcemanager_service
+  ]
 }
 
 resource "google_project_service" "cloudtasks_service" {
   service = "cloudtasks.googleapis.com"
+
+  depends_on = [
+    google_project_service.cloudresourcemanager_service
+  ]
 }
 
 resource "google_service_account" "service_account" {
   account_id = random_pet.google_service_account.id
+
+  depends_on = [
+    google_project_service.iam_service
+  ]
 }
 
 resource "google_project_iam_binding" "iam_binding" {
@@ -89,6 +121,10 @@ resource "google_project_iam_binding" "iam_binding" {
 
 resource "google_pubsub_topic" "topic" {
   name = random_pet.google_pubsub_topic.id
+
+  depends_on = [
+    google_project_service.pubsub_service
+  ]
 }
 
 resource "google_cloud_scheduler_job" "job" {
