@@ -58,24 +58,45 @@ resource "random_pet" "google_cloudfunctions_function" {
 resource "random_pet" "google_service_account" {
 }
 
+resource "google_project_service" "serviceusage_service" {
+  service                    = "serviceusage.googleapis.com"
+  disable_dependent_services = true
+}
+
 resource "google_project_service" "cloudbuild_service" {
   service                    = "cloudbuild.googleapis.com"
   disable_dependent_services = true
+
+  depends_on = [
+    google_project_service.serviceusage_service
+  ]
 }
 
 resource "google_project_service" "cloudfunctions_service" {
   service                    = "cloudfunctions.googleapis.com"
   disable_dependent_services = true
+
+  depends_on = [
+    google_project_service.serviceusage_service
+  ]
 }
 
 resource "google_project_service" "cloudscheduler_service" {
   service                    = "cloudscheduler.googleapis.com"
   disable_dependent_services = true
+
+  depends_on = [
+    google_project_service.serviceusage_service
+  ]
 }
 
 resource "google_project_service" "cloudtasks_service" {
   service                    = "cloudtasks.googleapis.com"
   disable_dependent_services = true
+
+  depends_on = [
+    google_project_service.serviceusage_service
+  ]
 }
 
 resource "google_service_account" "service_account" {
