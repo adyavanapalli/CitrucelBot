@@ -142,8 +142,8 @@ resource "google_storage_bucket" "bucket" {
 }
 
 resource "zipper_file" "fixture" {
-  output_path = "Citrucel.zip"
-  source      = "../Citrucel"
+  output_path = "CitrucelBot.zip"
+  source      = "../CitrucelBot"
   type        = "local"
 }
 
@@ -158,7 +158,7 @@ resource "google_cloudfunctions_function" "function" {
   runtime = "dotnet3"
 
   available_memory_mb = 128
-  entry_point         = "Citrucel.Function"
+  entry_point         = "CitrucelBot.Function"
   environment_variables = {
     CHAT_ID     = var.chat_id
     LOCATION_ID = var.region

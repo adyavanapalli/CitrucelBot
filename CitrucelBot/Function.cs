@@ -7,7 +7,7 @@ using System;
 using System.Configuration;
 using System.Threading;
 
-namespace Citrucel
+namespace CitrucelBot
 {
     /// <summary>
     /// Implements the <see cref="ICloudEventFunction{MessagePublishedData}" /> interface.
@@ -69,16 +69,17 @@ namespace Citrucel
         /// Asynchronously handles the specified <see cref="CloudEvent" />.
         /// </summary>
         /// <param name="cloudEvent">The original <see cref="CloudEvent" /> extracted from the request.</param>
-        /// <param name="data">The deserialized <see cref="MessagePublishedData" /> constructed from the data.</param>
+        /// <param name="messagePublishedData">The deserialized <see cref="MessagePublishedData" /> constructed from the
+        /// data.</param>
         /// <param name="cancellationToken">A cancellation token which indicates if the request is aborted.</param>
         /// <returns>A task representing the potentially-asynchronous handling of the event. If the task completes, the
         /// function is deemed to be successful.</returns>
         public async System.Threading.Tasks.Task HandleAsync(CloudEvent cloudEvent,
-                                                             MessagePublishedData data,
+                                                             MessagePublishedData messagePublishedData,
                                                              CancellationToken cancellationToken)
         {
             _ = cloudEvent ?? throw new ArgumentNullException(nameof(cloudEvent));
-            _ = data ?? throw new ArgumentNullException(nameof(data));
+            _ = messagePublishedData ?? throw new ArgumentNullException(nameof(messagePublishedData));
 
             var cloudTasksClient = await CloudTasksClient.CreateAsync();
             var parent = new QueueName(_projectId, _locationId, _queueId);
