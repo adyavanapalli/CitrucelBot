@@ -1,4 +1,7 @@
 terraform {
+  backend "gcs" {
+    bucket = "citrucelbot.starsandmanifolds.xyz"
+  }
   required_providers {
     google = {
       source = "hashicorp/google"
