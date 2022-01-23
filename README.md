@@ -1,5 +1,7 @@
 # CitrucelBot
 
+[![Terraform](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/terraform.yml/badge.svg)](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/terraform.yml)
+
 A telegram bot for sending reminders to take Citrucel.
 
 ![A screenshot of the bot in action](docs/screenshot.png)
