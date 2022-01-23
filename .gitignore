@@ -8,4 +8,5 @@ obj/
 *.tfstate
 *.tfstate.*
 
-Citrucel.zip
+CitrucelBot.zip
+terraform.tfvars
