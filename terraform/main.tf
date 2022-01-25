@@ -9,9 +9,6 @@ terraform {
     random = {
       source = "hashicorp/random"
     }
-    zipper = {
-      source = "ArthurHlt/zipper"
-    }
   }
 }
 
@@ -144,16 +141,17 @@ resource "google_storage_bucket" "bucket" {
   location = var.region
 }
 
-resource "zipper_file" "fixture" {
+data "archive_file" "source" {
   output_path = "CitrucelBot.zip"
-  source      = "../CitrucelBot"
-  type        = "local"
+  source_dir  = "../CitrucelBot"
+  type        = "zip"
+  excludes = fileset("../CitrucelBot", "{bin,obj}/**")
 }
 
 resource "google_storage_bucket_object" "object" {
-  name   = zipper_file.fixture.output_path
+  name   = "${data.archive_file.source.output_sha}-${data.archive_file.source.output_path}"
   bucket = google_storage_bucket.bucket.name
-  source = zipper_file.fixture.output_path
+  source = data.archive_file.source.output_path
 }
 
 resource "google_cloudfunctions_function" "function" {
