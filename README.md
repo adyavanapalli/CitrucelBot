@@ -1,6 +1,6 @@
 # CitrucelBot
 
-[![.NET Build](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/dotnet.yml/badge.svg)](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/dotnet.yml) [![Terraform](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/terraform.yml/badge.svg)](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/terraform.yml)
+[![CI](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/ci.yml/badge.svg)](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/ci.yml)
 
 A telegram bot for sending reminders to take Citrucel.
 
