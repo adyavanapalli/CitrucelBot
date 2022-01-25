@@ -1,15 +1,19 @@
 name: .NET Build
 
-defaults:
-  run:
-    working-directory: "CitrucelBot"
 on:
   push:
     branches:
       - main
 
+    paths:
+      - "CitrucelBot/**"
+
 jobs:
   build:
+    defaults:
+      run:
+        working-directory: "CitrucelBot"
+
     runs-on: ubuntu-latest
 
     steps:
