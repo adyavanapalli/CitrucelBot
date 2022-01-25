@@ -163,11 +163,11 @@ resource "google_cloudfunctions_function" "function" {
   available_memory_mb = 128
   entry_point         = "CitrucelBot.Function"
   environment_variables = {
+    BOT_TOKEN   = var.bot_token
     CHAT_ID     = var.chat_id
     LOCATION_ID = var.region
     PROJECT_ID  = var.project
     QUEUE_ID    = google_cloud_tasks_queue.queue.name
-    BOT_TOKEN   = var.bot_token
   }
   event_trigger {
     event_type = "google.pubsub.topic.publish"
