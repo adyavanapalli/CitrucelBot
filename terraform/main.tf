@@ -145,7 +145,7 @@ data "archive_file" "source" {
   output_path = "CitrucelBot.zip"
   source_dir  = "../CitrucelBot"
   type        = "zip"
-  excludes = fileset("../CitrucelBot", "{bin,obj}/**")
+  excludes    = fileset("../CitrucelBot", "{bin,obj}/**")
 }
 
 resource "google_storage_bucket_object" "object" {
