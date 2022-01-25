@@ -1,15 +1,20 @@
 name: "Terraform"
 
-defaults:
-  run:
-    working-directory: "terraform"
 on:
   push:
     branches:
       - main
 
+    paths:
+      - "CitrucelBot/**"
+      - "terraform/**"
+
 jobs:
   terraform:
+    defaults:
+      run:
+        working-directory: "terraform"
+
     runs-on: ubuntu-latest
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
