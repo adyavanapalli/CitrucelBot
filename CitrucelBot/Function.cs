@@ -84,6 +84,8 @@ namespace CitrucelBot
             var cloudTasksClient = await CloudTasksClient.CreateAsync();
             var parent = new QueueName(_projectId, _locationId, _queueId);
 
+            var message = "Time to Citrucel it up folks!";
+
             await cloudTasksClient.CreateTaskAsync(new CreateTaskRequest
             {
                 Parent = parent.ToString(),
@@ -92,9 +94,11 @@ namespace CitrucelBot
                     HttpRequest = new HttpRequest
                     {
                         HttpMethod = HttpMethod.Get,
-                        Url = $"https://api.telegram.org/bot{_botToken}/sendMessage?chat_id={_chatId}&text=Time to Citrucel it up folks!",
+                        Url = $"https://api.telegram.org/bot{_botToken}/sendMessage" +
+                              $"?chat_id={_chatId}" +
+                              $"&text={message}",
                     },
-                    ScheduleTime = Timestamp.FromDateTime(DateTime.UtcNow.AddSeconds(new Random().Next(SECONDS_UNTIL_INVOCATION)))
+                    ScheduleTime = Timestamp.FromDateTime(DateTime.UtcNow.AddSeconds(new Random().Next(SECONDS_UNTIL_INVOCATION))),
                 }
             });
         }
