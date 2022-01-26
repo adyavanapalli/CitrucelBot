@@ -3,6 +3,7 @@ using Google.Cloud.Functions.Framework;
 using Google.Cloud.Tasks.V2;
 using Google.Events.Protobuf.Cloud.PubSub.V1;
 using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json;
 using System;
 using System.Configuration;
 using System.Threading;
@@ -30,19 +31,26 @@ namespace CitrucelBot
         private readonly string _chatId;
 
         /// <summary>
-        /// The location ID of the region this Cloud Function is running in.
+        /// An object representing the payload within <see cref="MessagePublishedData.Message"/>. It provides
+        /// identifying details for the GCP Cloud Tasks queue to create tasks in.
         /// </summary>
-        private readonly string _locationId;
+        private class Payload
+        {
+            /// <summary>
+            /// The location ID of the region the Cloud Tasks queue is in.
+            /// </summary>
+            public string LocationId { get; set; }
 
-        /// <summary>
-        /// The project ID of the project this Cloud Function is running in.
-        /// </summary>
-        private readonly string _projectId;
+            /// <summary>
+            /// The project ID of the project Cloud Tasks queue is running in.
+            /// </summary>
+            public string ProjectId { get; set; }
 
-        /// <summary>
-        /// The queue ID of the Cloud Tasks queue tasks will be pushed to.
-        /// </summary>
-        private readonly string _queueId;
+            /// <summary>
+            /// The queue ID of the Cloud Tasks queue tasks will be created in.
+            /// </summary>
+            public string QueueId { get; set; }
+        }
 
         /// <summary>
         /// Constructor.
@@ -54,15 +62,6 @@ namespace CitrucelBot
 
             _chatId = Environment.GetEnvironmentVariable("CHAT_ID")
                 ?? throw new ConfigurationErrorsException("Missing CHAT_ID environment variable.");
-
-            _locationId = Environment.GetEnvironmentVariable("LOCATION_ID")
-                ?? throw new ConfigurationErrorsException("Missing LOCATION_ID environment variable.");
-
-            _projectId = Environment.GetEnvironmentVariable("PROJECT_ID")
-                ?? throw new ConfigurationErrorsException("Missing PROJECT_ID environment variable.");
-
-            _queueId = Environment.GetEnvironmentVariable("QUEUE_ID")
-                ?? throw new ConfigurationErrorsException("Missing QUEUE_ID environment variable.");
         }
 
         /// <summary>
@@ -81,11 +80,10 @@ namespace CitrucelBot
             _ = cloudEvent ?? throw new ArgumentNullException(nameof(cloudEvent));
             _ = messagePublishedData ?? throw new ArgumentNullException(nameof(messagePublishedData));
 
+            var payload = JsonConvert.DeserializeObject<Payload>(messagePublishedData.Message.TextData);
+            var parent = new QueueName(payload.ProjectId, payload.LocationId, payload.QueueId);
+
             var cloudTasksClient = await CloudTasksClient.CreateAsync();
-            var parent = new QueueName(_projectId, _locationId, _queueId);
-
-            var message = "Time to Citrucel it up folks!";
-
             await cloudTasksClient.CreateTaskAsync(new CreateTaskRequest
             {
                 Parent = parent.ToString(),
@@ -96,7 +94,7 @@ namespace CitrucelBot
                         HttpMethod = HttpMethod.Get,
                         Url = $"https://api.telegram.org/bot{_botToken}/sendMessage" +
                               $"?chat_id={_chatId}" +
-                              $"&text={message}",
+                               "&text=Time to Citrucel it up folks!",
                     },
                     ScheduleTime = Timestamp.FromDateTime(DateTime.UtcNow.AddSeconds(new Random().Next(SECONDS_UNTIL_INVOCATION))),
                 }
