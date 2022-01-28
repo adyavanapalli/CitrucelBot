@@ -107,6 +107,22 @@ resource "google_pubsub_topic" "topic" {
   ]
 }
 
+resource "google_cloud_scheduler_job" "job" {
+  name = random_pet.google_cloud_scheduler_job.id
+
+  pubsub_target {
+    topic_name = google_pubsub_topic.topic.id
+
+    data = base64encode("GNU Terry Pratchett")
+  }
+  schedule  = "0 18 * * *"
+  time_zone = "America/New_York"
+
+  depends_on = [
+    google_project_service.cloudscheduler_service
+  ]
+}
+
 resource "google_cloud_tasks_queue" "queue" {
   location = var.region
 
@@ -117,26 +133,6 @@ resource "google_cloud_tasks_queue" "queue" {
 
   depends_on = [
     google_project_service.cloudtasks_service
-  ]
-}
-
-resource "google_cloud_scheduler_job" "job" {
-  name = random_pet.google_cloud_scheduler_job.id
-
-  pubsub_target {
-    topic_name = google_pubsub_topic.topic.id
-
-    data = base64encode(jsonencode({
-      LocationId = var.region
-      ProjectId  = var.project
-      QueueId    = google_cloud_tasks_queue.queue.name
-    }))
-  }
-  schedule  = "0 18 * * *"
-  time_zone = "America/New_York"
-
-  depends_on = [
-    google_project_service.cloudscheduler_service
   ]
 }
 
@@ -167,6 +163,7 @@ resource "google_cloudfunctions_function" "function" {
   environment_variables = {
     BOT_TOKEN = var.bot_token
     CHAT_ID   = var.chat_id
+    QUEUE_ID  = google_cloud_tasks_queue.queue.id
   }
   event_trigger {
     event_type = "google.pubsub.topic.publish"

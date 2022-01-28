@@ -3,7 +3,6 @@ using Google.Cloud.Functions.Framework;
 using Google.Cloud.Tasks.V2;
 using Google.Events.Protobuf.Cloud.PubSub.V1;
 using Google.Protobuf.WellKnownTypes;
-using Newtonsoft.Json;
 using System;
 using System.Configuration;
 using System.Threading;
@@ -31,26 +30,15 @@ namespace CitrucelBot
         private readonly string _chatId;
 
         /// <summary>
-        /// An object representing the payload within <see cref="MessagePublishedData.Message"/>. It provides
-        /// identifying details for the GCP Cloud Tasks queue to create tasks in.
+        /// The Cloud Tasks queue tasks will be created and run in. In the form
+        /// `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`.
         /// </summary>
-        private class Payload
-        {
-            /// <summary>
-            /// The location ID of the region the Cloud Tasks queue is in.
-            /// </summary>
-            public string LocationId { get; set; }
+        private readonly string _queueId;
 
-            /// <summary>
-            /// The project ID of the project Cloud Tasks queue is running in.
-            /// </summary>
-            public string ProjectId { get; set; }
-
-            /// <summary>
-            /// The queue ID of the Cloud Tasks queue tasks will be created in.
-            /// </summary>
-            public string QueueId { get; set; }
-        }
+        /// <summary>
+        /// The client used to create Cloud Tasks queue tasks.
+        /// </summary>
+        private readonly CloudTasksClient _cloudTasksClient;
 
         /// <summary>
         /// Constructor.
@@ -62,6 +50,11 @@ namespace CitrucelBot
 
             _chatId = Environment.GetEnvironmentVariable("CHAT_ID")
                 ?? throw new ConfigurationErrorsException("Missing CHAT_ID environment variable.");
+
+            _queueId = Environment.GetEnvironmentVariable("QUEUE_ID")
+                ?? throw new ConfigurationErrorsException("Missing QUEUE_ID environment variable.");
+
+            _cloudTasksClient = CloudTasksClient.Create();
         }
 
         /// <summary>
@@ -80,13 +73,9 @@ namespace CitrucelBot
             _ = cloudEvent ?? throw new ArgumentNullException(nameof(cloudEvent));
             _ = messagePublishedData ?? throw new ArgumentNullException(nameof(messagePublishedData));
 
-            var payload = JsonConvert.DeserializeObject<Payload>(messagePublishedData.Message.TextData);
-            var parent = new QueueName(payload.ProjectId, payload.LocationId, payload.QueueId);
-
-            var cloudTasksClient = await CloudTasksClient.CreateAsync();
-            await cloudTasksClient.CreateTaskAsync(new CreateTaskRequest
+            await _cloudTasksClient.CreateTaskAsync(new CreateTaskRequest
             {
-                Parent = parent.ToString(),
+                Parent = _queueId,
                 Task = new Task
                 {
                     HttpRequest = new HttpRequest
