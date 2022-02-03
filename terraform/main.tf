@@ -139,6 +139,8 @@ resource "google_cloud_tasks_queue" "queue" {
 resource "google_storage_bucket" "bucket" {
   name     = random_pet.google_storage_bucket.id
   location = var.region
+
+  uniform_bucket_level_access = true
 }
 
 data "archive_file" "source" {
