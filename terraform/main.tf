@@ -141,9 +141,6 @@ resource "google_storage_bucket" "bucket" {
   location = var.region
 
   uniform_bucket_level_access = true
-  logging {
-    log_bucket = "_Default"
-  }
 }
 
 data "archive_file" "source" {
