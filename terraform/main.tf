@@ -18,23 +18,12 @@ provider "google" {
   zone    = var.zone
 }
 
-resource "random_pet" "google_pubsub_topic" {
-}
-
-resource "random_pet" "google_cloud_scheduler_job" {
-}
-
-resource "random_pet" "google_cloud_tasks_queue" {
-}
-
-resource "random_pet" "google_storage_bucket" {
-}
-
-resource "random_pet" "google_cloudfunctions_function" {
-}
-
-resource "random_pet" "google_service_account" {
-}
+resource "random_pet" "google_pubsub_topic_name" {}
+resource "random_pet" "google_cloud_scheduler_job_name" {}
+resource "random_pet" "google_cloud_tasks_queue_name" {}
+resource "random_pet" "google_storage_bucket_name" {}
+resource "random_pet" "google_cloudfunctions_function_name" {}
+resource "random_pet" "google_service_account_name" {}
 
 resource "google_project_service" "iam_service" {
   service = "iam.googleapis.com"
@@ -83,7 +72,7 @@ resource "google_project_service" "cloudtasks_service" {
 }
 
 resource "google_service_account" "service_account" {
-  account_id = random_pet.google_service_account.id
+  account_id = random_pet.google_service_account_name.id
 
   depends_on = [
     google_project_service.iam_service
@@ -100,7 +89,7 @@ resource "google_project_iam_binding" "iam_binding" {
 }
 
 resource "google_pubsub_topic" "topic" {
-  name = random_pet.google_pubsub_topic.id
+  name = random_pet.google_pubsub_topic_name.id
 
   depends_on = [
     google_project_service.pubsub_service
@@ -108,7 +97,7 @@ resource "google_pubsub_topic" "topic" {
 }
 
 resource "google_cloud_scheduler_job" "job" {
-  name = random_pet.google_cloud_scheduler_job.id
+  name = random_pet.google_cloud_scheduler_job_name.id
 
   pubsub_target {
     topic_name = google_pubsub_topic.topic.id
@@ -126,7 +115,7 @@ resource "google_cloud_scheduler_job" "job" {
 resource "google_cloud_tasks_queue" "queue" {
   location = var.region
 
-  name = random_pet.google_cloud_tasks_queue.id
+  name = random_pet.google_cloud_tasks_queue_name.id
   stackdriver_logging_config {
     sampling_ratio = 1.0
   }
@@ -137,7 +126,7 @@ resource "google_cloud_tasks_queue" "queue" {
 }
 
 resource "google_storage_bucket" "bucket" {
-  name     = random_pet.google_storage_bucket.id
+  name     = random_pet.google_storage_bucket_name.id
   location = var.region
 
   uniform_bucket_level_access = true
@@ -157,7 +146,7 @@ resource "google_storage_bucket_object" "object" {
 }
 
 resource "google_cloudfunctions_function" "function" {
-  name    = random_pet.google_cloudfunctions_function.id
+  name    = random_pet.google_cloudfunctions_function_name.id
   runtime = "dotnet3"
 
   available_memory_mb = 128
