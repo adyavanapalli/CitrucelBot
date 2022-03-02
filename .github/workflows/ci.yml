@@ -2,9 +2,8 @@ name: "CI"
 
 on:
   push:
-    branches:
-      - main
-  
+    branches: [ main ]
+
 jobs:
   build:
     defaults:
@@ -21,8 +20,8 @@ jobs:
         with:
           dotnet-version: 3.1.x
 
-      - name: Build .NET
-        run: dotnet build --configuration=Release
+      - name: .NET Publish
+        run: dotnet publish --configuration=Release
 
   terraform:
     needs: build
