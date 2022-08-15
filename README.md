@@ -1,6 +1,6 @@
 # CitrucelBot
 
-[![CI](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/ci.yml/badge.svg)](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/ci.yml)
+[![CI](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/ci.yaml/badge.svg)](https://github.com/adyavanapalli/CitrucelBot/actions/workflows/ci.yaml)
 
 A telegram bot for sending reminders to take Citrucel.
 
